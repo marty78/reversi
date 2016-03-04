@@ -1,24 +1,23 @@
 import sys
 import string
 
-DARK = 1
-LIGHT = 2
+BLACK = 1
+WHITE = 2
 
 
 class Board:
 	boardsize = None
 	gameboard = None
-	DARK = 1
-	LIGHT = 2
+	BLACK = 1
+	WHITE = 2
 
 	def __init__(self, boardsize):
 		self.boardsize = boardsize
 		self.gameboard = self.board = [[0 for x in range(0, boardsize)] for x in range(0, boardsize)] #Maa endre denne pga kopi?
-		for i in range(0,boardsize):
-		self.board[int(boardsize/2) - 1][int(boardsize/2) - 1] = LIGHT
-		self.board[int(boardsize/2)][int(boardsize/2)] = LIGHT
-		self.board[int(boardsize/2)][int(boardsize/2) - 1] = DARK
-		self.board[int(boardsize/2) - 1][int(boardsize/2)] = DARK
+		self.board[int(boardsize/2) - 1][int(boardsize/2) - 1] = WHITE
+		self.board[int(boardsize/2)][int(boardsize/2)] = WHITE
+		self.board[int(boardsize/2)][int(boardsize/2) - 1] = BLACK
+		self.board[int(boardsize/2) - 1][int(boardsize/2)] = BLACK
 
 	def printboard(self):
 		sys.stdout.write("  ")
@@ -37,9 +36,9 @@ class Board:
 			# print 'i = ', i
 			sys.stdout.write("%2d |" % (i + 1))
 			for j in range(0, self.boardsize):
-				if self.gameboard[i][j] == LIGHT:
+				if self.gameboard[i][j] == WHITE:
 					sys.stdout.write(" L |")
-				elif self.gameboard[i][j] == DARK:
+				elif self.gameboard[i][j] == BLACK:
 					sys.stdout.write(" D |")
 				else:
 					sys.stdout.write("   |")
@@ -48,10 +47,23 @@ class Board:
 				sys.stdout.write("---+")
 			sys.stdout.write("\n")
 
+	def makeMove(self, col, row, color):
+		self.board[row][col] = color
+
+
 
 def main():
 	board = Board(4)
 	board.printboard()
+	while(1):
+		move = raw_input('Make a move: ')
+		move = list(move)
+		col = ord(move[0]) - ord('a')
+		row = ord(move[1]) - ord('1')
+		color = WHITE
+		board.makeMove(col,row,color)
+		board.printboard()
+
 
 main()
 
