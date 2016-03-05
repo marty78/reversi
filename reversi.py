@@ -24,7 +24,7 @@ class Board:
 		# self.gameboard[5][2] = WHITE
 
 
-	def printboard(self):
+	def printBoard(self):
 		sys.stdout.write("  ")
 		i = 0
 		for c in string.ascii_lowercase:
@@ -206,7 +206,6 @@ class Board:
 					self.gameboard[row+i][col+i] = color
 
 
-
 	def makeMove(self, col, row, color):
 		valid, direction = self.moveValid(col, row, color)
 		if(valid == True):
@@ -216,11 +215,35 @@ class Board:
 		else:
 			sys.stdout.write('ERROR: Move not valid\n')
 
+	def printScore(self):
+		score_white = 0
+		score_black = 0
+		for row in range(0,self.boardsize-1):
+			for col in range(0, self.boardsize-1):
+				if(self.gameboard[row][col] == 1):
+					score_black += 1
+				if(self.gameboard[row][col] == 2):
+					score_white += 1
+
+		sys.stdout.write('Score light: %2d'   % score_white)
+		sys.stdout.write('        Score dark: %2d \n' % score_black)
+
+
+	def checkIfValidMoves(self,color):
+		any_valid = False
+		for row in range(0,self.boardsize-1):
+			for col in range(0,self.boardsize-1):
+				valid, _ = moveValid(col,row,color)
+				if(valid == True):
+					any_valid = True
+					break
+		return any_valid
+
 
 
 def main():
 	board = Board(8)
-	board.printboard()
+	board.printBoard()
 	while(1):
 		move = raw_input('Make a move: ')
 		move = list(move)
@@ -228,7 +251,8 @@ def main():
 		row = ord(move[1]) - ord('1')
 		color = WHITE
 		board.makeMove(col,row,color)
-		board.printboard()
+		board.printBoard()
+		board.printScore()
 
 
 main()
