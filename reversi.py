@@ -20,7 +20,7 @@ class Board:
 		self.gameboard[int(boardsize/2) - 1][int(boardsize/2)] = BLACK
 		#testing
 		# self.gameboard[3][3] = BLACK
-		# self.gameboard[2][4] = WHITE	
+		self.gameboard[4][5] = WHITE	
 		# self.gameboard[5][2] = WHITE
 
 
@@ -60,6 +60,7 @@ class Board:
 			my_color = WHITE
 			opponent_color = BLACK
 
+		direction = None
 		validity = False
 
 		#Check if the square is valid and empty
@@ -76,16 +77,18 @@ class Board:
 					break
 				if(self.gameboard[row][col-i] == my_color):
 					validity = True
-					print 'left'
+					direction = 'west'
+					# print 'left'
 					break
 		#Right
 		if(col+2 <= self.boardsize-1 and self.gameboard[row][col+1] == opponent_color):
 			for i in range(2, self.boardsize-1-col):
 				if(self.gameboard[row][col+i] == 0):
 					break
-				if(self.gameboard[row][col+1] == my_color):
+				if(self.gameboard[row][col+i] == my_color):
 					validity = True
-					print 'right'
+					direction = 'east'
+					# print 'right'
 					break
 		#Up
 		if(row-2 >= 0 and self.gameboard[row-1][col] == opponent_color):
@@ -94,7 +97,8 @@ class Board:
 					break
 				if(self.gameboard[row-i][col] == my_color):
 					validity = True
-					print 'up'
+					direction = 'north'
+					# print 'up'
 					break
 		#Down
 		if(row+2 <= self.boardsize-1 and self.gameboard[row+1][col] == opponent_color):
@@ -104,7 +108,8 @@ class Board:
 					break
 				if(self.gameboard[row+i][col] == my_color):
 					validity = True
-					print 'down'
+					direction = 'south'
+					# print 'down'
 					break
 		#Diagonally up to the left
 		if(row-2 >= 0 and col-2 >= 0 and self.gameboard[row-1][col-1] == opponent_color):
@@ -113,16 +118,18 @@ class Board:
 					break
 				if(self.gameboard[row-i][col-i] == my_color):
 					validity = True
-					print 'diag up left'
+					direction = 'northwest'
+					# print 'diag up left'
 					break
 		#Diagonally up to the right
 		if(row-2 >= 0 and col+2 <= self.boardsize-1 and self.gameboard[row-1][col+1] == opponent_color):
 			for i in range(2,min(row,self.boardsize-1-col)):
 				if(self.gameboard[row-i][col+i] == 0):
 					break
-				if(self.gameboard[row-i][col-i] == my_color):
+				if(self.gameboard[row-i][col+i] == my_color):
 					validity = True
-					print 'diag up right'
+					direction = 'northeast'
+					# print 'diag up right'
 					break
 		#Diagonally down to the left
 		if(row+2 <= self.boardsize-1 and col-2 >= 0 and self.gameboard[row+1][col-1] == opponent_color):
@@ -131,7 +138,8 @@ class Board:
 					break
 				if(self.gameboard[row+i][col-i] == my_color):
 					validity = True
-					print 'diag down left'
+					direction = 'southwest'
+					# print 'diag down left'
 					break
 		#Diagonally down to the right
 		if(row+2 <= self.boardsize-1 and col+2 <= self.boardsize-1 and self.gameboard[row+1][col+1] == opponent_color):
@@ -140,19 +148,71 @@ class Board:
 					break
 				if(self.gameboard[row+i][col+i] == my_color):
 					validity = True
-					print 'diag down right'
+					direction = 'southeast'
+					# print 'diag down right'
 					break
 
+		return validity, direction
 
 
-		return validity
+	def executeMove(self, row, col, color, direction):
+		if(direction == 'east'):
+			for i in range(0,self.boardsize-1-col):
+				if(self.gameboard[row][col+i] == color):
+					break
+				else:
+					self.gameboard[row][col+i] = color
+		if(direction == 'west'):
+			for i in range(0,col):
+				if(self.gameboard[row][col-i] == color):
+					break
+				else:
+					self.gameboard[row][col-i] = color
+		if(direction == 'north'):
+			for i in range(0,row):
+				if(self.gameboard[row-i][col] == color):
+					break
+				else:
+					self.gameboard[row-i][col] = color
+		if(direction == 'south'):
+			for i in range(0, self.boardsize-1 - row):
+				if(self.gameboard[row+i][col] == color):
+					break
+				else:
+					self.gameboard[row+i][col] = color
+		if(direction == 'northwest'):
+			for i in range(0, min(row,col)):
+				if(self.gameboard[row-i][col-i] == color):
+					break
+				else:
+					self.gameboard[row-i][col-i] = color
+		if(direction == 'northeast'):
+			for i in range(0,min(row,self.boardsize-1-col)):
+				if(self.gameboard[row-i][col+i] == color):
+					break
+				else:
+					self.gameboard[row-i][col+i] = color
+		if(direction == 'southwest'):
+			for i in range(0,min(col, self.boardsize-1-row)):
+				if(self.gameboard[row+i][col-i] == color):
+					break
+				else:
+					self.gameboard[row+i][col-i] = color
+		if(direction == 'southeast'):
+			for i in range(0,min(self.boardsize-1-row, self.boardsize-1-col)):
+				if(self.gameboard[row+i][col+i] == color):
+					break
+				else:
+					self.gameboard[row+i][col+i] = color
 
 
 
 	def makeMove(self, col, row, color):
-		if(self.moveValid(col, row, color) == True):
-		# if(True):
-			self.board[row][col] = color
+		valid, direction = self.moveValid(col, row, color)
+		if(valid == True):
+			# self.board[row][col] = color
+			self.executeMove(row, col, color, direction)
+
 		else:
 			sys.stdout.write('ERROR: Move not valid\n')
 
