@@ -12,6 +12,8 @@ class Board:
 	boardsize = None
 	gameboard = None
 	last_move = None
+	# score_white = None
+	# score_black = None
 
 
 	def __init__(self, boardsize):
@@ -21,11 +23,14 @@ class Board:
 		self.gameboard[int(boardsize/2)][int(boardsize/2)] = WHITE
 		self.gameboard[int(boardsize/2)][int(boardsize/2) - 1] = BLACK
 		self.gameboard[int(boardsize/2) - 1][int(boardsize/2)] = BLACK
+
+		# self.score_white = self.getScore(WHITE)
+		# self.score_black = self.getScore(BLACK)
 		#testing
-		# self.gameboard[3][3] = WHITE
-		# self.gameboard[3][4] = WHITE	
-		# self.gameboard[3][5] = WHITE
-		# self.gameboard[4][3] = BLACK
+		# self.gameboard[2][1] = WHITE
+		# self.gameboard[0][0] = WHITE	
+		# self.gameboard[1][0] = WHITE
+		# self.gameboard[2][0] = WHITE
 		# self.gameboard[4][4] = BLACK	
 		# self.gameboard[4][5] = BLACK
 
@@ -213,60 +218,66 @@ class Board:
 			self.gameboard[row][col] = color
 
 	def makeMove(self, col, row, color):
+
 		valid, directions = self.moveValid(col, row, color)
 		if(valid == True):
-			# self.board[row][col] = color
 			self.executeMove(row, col, color, directions)
 			self.last_move = [row, col]
 
 		else:
 			sys.stdout.write('ERROR: Move not valid\n\n')
+		return valid
 
 	def printScore(self):
-		score_white = 0
-		score_black = 0
-		for row in range(0,self.boardsize-1):
-			for col in range(0, self.boardsize-1):
-				if(self.gameboard[row][col] == 1):
-					score_black += 1
-				if(self.gameboard[row][col] == 2):
-					score_white += 1
+		# score_white = 0
+		# score_black = 0
+		# for row in range(0,self.boardsize-1):
+		# 	for col in range(0, self.boardsize-1):
+		# 		if(self.gameboard[row][col] == 1):
+		# 			score_black += 1
+		# 		if(self.gameboard[row][col] == 2):
+		# 			score_white += 1
+		score_white = self.getScore(WHITE)
+		score_black = self.getScore(BLACK)
 
 		sys.stdout.write('Score light: %2d'   % score_white)
 		sys.stdout.write('        Score dark: %2d \n' % score_black)
 
 	def getScore(self, color):
 		score = 0
-		for row in range(0,self.boardsize-1):
-			for col in range(0, self.boardsize-1):
+		for row in range(0,self.boardsize):
+			for col in range(0, self.boardsize):
 				if(self.gameboard[row][col] == color):
 					score += 1
 		return score
 
 	def getValidMoves(self, color):
 		valid_moves = []
-		for row in range(0,self.boardsize-1):
-			for col in range(0,self.boardsize-1):
+		for row in range(0,self.boardsize):
+			for col in range(0,self.boardsize):
 				valid, directions = self.moveValid(col, row, color)
 				if(valid == True):
 					temp_board = copy.deepcopy(self)
-					temp_board.executeMove(row, col, color, directions)
+					temp_board.makeMove(col, row, color)
 					valid_moves.append(temp_board)
 
 		return valid_moves
 
-
-
-	# This function may be redundant
-	def checkIfValidMoves(self,color):
+	def checkIfAnyValidMoves(self,color):
 		any_valid = False
-		for row in range(0,self.boardsize-1):
-			for col in range(0,self.boardsize-1):
-				valid, _ = moveValid(col,row,color)
+		for row in range(0,self.boardsize):
+			for col in range(0,self.boardsize):
+				valid, _ = self.moveValid(col,row,color)
 				if(valid == True):
 					any_valid = True
 					break
 		return any_valid
+
+	def gameOver(self):
+		game_over = False
+		if(self.checkIfAnyValidMoves(BLACK) == False and self.checkIfAnyValidMoves(WHITE) == False):
+			game_over = True
+		return game_over
 
 
 class Ai:
@@ -287,52 +298,131 @@ class Ai:
 	def updateRootBoard(self, board):
 		self.root_board = board
 
-	# def minimax(board, depth, maximizer):
+	def minimax(self, board, depth, maximizer):
+		if(depth == 0):
+			return board.getScore(self.my_color)
+
+		if(maximizer == True):
+			if(board.checkIfAnyValidMoves(self.my_color) == False):	#Check if terminal node
+				return board.getScore(self.my_color)
+			best_score = -999999
+			valid_moves = board.getValidMoves(self.my_color)
+			for move in valid_moves:
+				score = self.minimax(move, depth-1, False)
+				best_score = max(best_score, score)
+			return best_score
+
+		else: #minimizer
+			if(board.checkIfAnyValidMoves(self.opponent_color) == False):	#Check if terminal node
+				return board.getScore(self.opponent_color)
+			best_score = 999999
+			valid_moves = board.getValidMoves(self.opponent_color)
+			for move in valid_moves:
+				score = self.minimax(move, depth-1, True)
+				best_score = min(best_score, score)
+			return best_score
 
 	def makeMoveAI(self):
-		maximizer = True
+		maximizer = False
+		valid_moves = self.root_board.getValidMoves(self.my_color)
+		best_score = 0
+		best_move = None
+		for move in valid_moves:
+			score = self.minimax(move, self.depth, maximizer)
+			if(score > best_score):
+				best_score = score
+				best_move = move
+
+		return best_move.last_move
 		
 
 
 
+def aiVSai(boardsize):
+	depth = 4
+	board = Board(boardsize)
+	ai1 = Ai(board,WHITE, depth)
+	ai2 = Ai(board,BLACK, depth)
+
+	while(True):
+		#AI1 make move
+		if(board.checkIfAnyValidMoves(WHITE) == True):
+			move_ai = ai1.makeMoveAI()
+			row = move_ai[0]
+			col = move_ai[1]
+			board.makeMove(col,row,WHITE)
+			board.printBoard()
+			print 'LIGHT ', move_ai 
+			board.printScore()
+			if(board.gameOver() == True):
+				break
+
+		#AI2 make move
+		if(board.checkIfAnyValidMoves(BLACK) == True):
+			move_ai = ai2.makeMoveAI()
+			row = move_ai[0]
+			col = move_ai[1]
+			board.makeMove(col,row,BLACK)
+			board.printBoard()
+			print 'DARK ', move_ai 
+			board.printScore()
+			if(board.gameOver() == True):
+				break
+
+	if(board.getScore(WHITE) > board.getScore(BLACK)):
+		winner = 'WHITE'
+	else:
+		winner = 'BLACK'
+
+	print 'Game over! The winner is:', winner
 
 
 def newGame(boardsize):
 	color_human = WHITE
 	color_ai = BLACK
-	depth = 3
+	depth = 4
 	board = Board(boardsize)
 	ai = Ai(board, color_ai, depth)
 	board.printBoard()
 
-	valid_moves = board.getValidMoves(color_human)
+	# valid_moves = board.getValidMoves(color_ai)
+	# for move in valid_moves:
+	# 	move.printBoard()
 
-	for valid_board in valid_moves:
-		valid_board.printBoard()
+	while(True):
+		#Player make move
+		if(board.checkIfAnyValidMoves(color_human) == True):
+			while(True):
+				move_human = raw_input('Make a move: ')
+				move = list(move_human)
+				col = ord(move[0]) - ord('a')
+				row = ord(move[1]) - ord('1')
+				valid = board.makeMove(col,row,color_human)
+				if(valid == True):
+					break
+			board.printBoard()
+			board.printScore()
+			if(board.gameOver() == True):
+				break
 
+		#AI make move
+		if(board.checkIfAnyValidMoves(color_ai) == True):
+			move_ai = ai.makeMoveAI()
+			row = move_ai[0]
+			col = move_ai[1]
+			board.makeMove(col,row,color_ai)
+			board.printBoard()
+			print 'AI moves ', move_ai 
+			board.printScore()
+			if(board.gameOver() == True):
+				break
 
+	if(board.getScore(color_human) > board.getScore(color_ai)):
+		winner = 'human'
+	else:
+		winner = 'AI'
 
-	# while(1):
-	# 	#Player make move
-	# 	move_human = raw_input('Make a move: ')
-	# 	move= list(move_human)
-	# 	col = ord(move[0]) - ord('a')
-	# 	row = ord(move[1]) - ord('1')
-	# 	board.makeMove(col,row,color_human)
-	# 	board.printBoard()
-	# 	board.printScore()
-
-	# 	#AI make move
-	# 	move_ai = ai.makeMoveAI()
-	# 	move = list(move_ai)
-	# 	col = ord(move[0]) - ord('a')
-	# 	row = ord(move[1]) - ord('1')
-	# 	print 'AI moves ', move_ai 
-	# 	board.makeMove(col,row,color_ai)
-	# 	board.printBoard()
-	# 	board.printScore()
-	# 	print ''
-
+	print 'Game over! The winner is:', winner
 
 
 
@@ -341,7 +431,8 @@ def newGame(boardsize):
 
 def main():
 	boardsize = 8
-	newGame(boardsize)
+	# newGame(boardsize)
+	aiVSai(boardsize)
 
 
 main()
