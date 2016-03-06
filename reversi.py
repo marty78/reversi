@@ -305,8 +305,6 @@ class Ai:
 		return best_move.last_move
 		
 
-
-
 def aiVSai(boardsize):
 	depth = 4
 	board = Board(boardsize)
@@ -351,7 +349,6 @@ def aiVSai(boardsize):
 
 	print 'Game over! The winner is:', winner
 
-
 def newGame(boardsize, color_human):
 	if(color_human == BLACK):
 		color_ai = WHITE
@@ -368,12 +365,13 @@ def newGame(boardsize, color_human):
 			#Player make move
 			if(board.checkIfAnyValidMoves(color_human) == True):
 				while(True):
-					move_human = raw_input('Make a move: ')
+					move_human = raw_input('<move> ')
 					move = list(move_human)
 					col = ord(move[0]) - ord('a')
 					row = ord(move[1]) - ord('1')
 					valid = board.makeMove(col,row,color_human)
 					if(valid == True):
+						print 'Move played:', move_human
 						break
 				board.printBoard()
 				board.printScore()
@@ -390,7 +388,7 @@ def newGame(boardsize, color_human):
 				col = str(unichr(col_int + 97))
 				move = col + row
 				board.printBoard()
-				print 'AI moves ', move 
+				print 'Move played:', move 
 				board.printScore()
 				if(board.gameOver() == True):
 					break
@@ -407,7 +405,7 @@ def newGame(boardsize, color_human):
 				col = str(unichr(col_int + 97))
 				move = col + row
 				board.printBoard()
-				print 'AI moves ', move
+				print 'Move played:', move
 				board.printScore()
 				if(board.gameOver() == True):
 					break
@@ -420,12 +418,12 @@ def newGame(boardsize, color_human):
 					row = ord(move[1]) - ord('1')
 					valid = board.makeMove(col,row,color_human)
 					if(valid == True):
+						print 'Move played:', move_human
 						break
 				board.printBoard()
 				board.printScore()
 				if(board.gameOver() == True):
 					break
-
 
 	if(board.getScore(color_human) > board.getScore(color_ai)):
 		winner = 'human'
@@ -435,10 +433,6 @@ def newGame(boardsize, color_human):
 		winner = 'AI'
 
 	print 'Game over! The winner is:', winner
-
-
-
-
 
 
 def main():
