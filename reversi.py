@@ -68,7 +68,8 @@ class Board:
 		#Now check in all directions:
 		#Left
 		if(col-2 >= 0 and self.gameboard[row][col-1] == opponent_color):
-			for i in range(2,col):
+			# for i in range(2,col):
+			for i in range(2,col+1):
 				if(self.gameboard[row][col-i] == 0):
 					break
 				if(self.gameboard[row][col-i] == my_color):
@@ -77,7 +78,8 @@ class Board:
 					break
 		#Right
 		if(col+2 <= self.boardsize-1 and self.gameboard[row][col+1] == opponent_color):
-			for i in range(2, self.boardsize-1-col):
+			# for i in range(2, self.boardsize-1-col):
+			for i in range(2, self.boardsize-col):
 				if(self.gameboard[row][col+i] == 0):
 					break
 				if(self.gameboard[row][col+i] == my_color):
@@ -86,7 +88,8 @@ class Board:
 					break
 		#Up
 		if(row-2 >= 0 and self.gameboard[row-1][col] == opponent_color):
-			for i in range(2,row):
+			# for i in range(2,row):
+			for i in range(2,row+1):
 				if(self.gameboard[row-i][col] == 0):
 					break
 				if(self.gameboard[row-i][col] == my_color):
@@ -95,8 +98,8 @@ class Board:
 					break
 		#Down
 		if(row+2 <= self.boardsize-1 and self.gameboard[row+1][col] == opponent_color):
-
-			for i in range(2, self.boardsize-1 - row):
+			# for i in range(2, self.boardsize-1 - row):
+			for i in range(2, self.boardsize - row):
 				if(self.gameboard[row+i][col] == 0):
 					break
 				if(self.gameboard[row+i][col] == my_color):
@@ -105,7 +108,8 @@ class Board:
 					break
 		#Diagonally up to the left
 		if(row-2 >= 0 and col-2 >= 0 and self.gameboard[row-1][col-1] == opponent_color):
-			for i in range(2, min(row,col)):
+			# for i in range(2, min(row,col)):
+			for i in range(2, min(row+1,col+1)):
 				if(self.gameboard[row-i][col-i] == 0):
 					break
 				if(self.gameboard[row-i][col-i] == my_color):
@@ -114,7 +118,8 @@ class Board:
 					break
 		#Diagonally up to the right
 		if(row-2 >= 0 and col+2 <= self.boardsize-1 and self.gameboard[row-1][col+1] == opponent_color):
-			for i in range(2,min(row,self.boardsize-1-col)):
+			# for i in range(2,min(row,self.boardsize-1-col)):
+			for i in range(2,min(row+1,self.boardsize-col)):
 				if(self.gameboard[row-i][col+i] == 0):
 					break
 				if(self.gameboard[row-i][col+i] == my_color):
@@ -123,7 +128,8 @@ class Board:
 					break
 		#Diagonally down to the left
 		if(row+2 <= self.boardsize-1 and col-2 >= 0 and self.gameboard[row+1][col-1] == opponent_color):
-			for i in range(2,min(col, self.boardsize-1-row)):
+			# for i in range(2,min(col, self.boardsize-1-row)):
+			for i in range(2,min(col+1, self.boardsize-row)):
 				if(self.gameboard[row+i][col-i] == 0):
 					break
 				if(self.gameboard[row+i][col-i] == my_color):
@@ -132,7 +138,8 @@ class Board:
 					break
 		#Diagonally down to the right
 		if(row+2 <= self.boardsize-1 and col+2 <= self.boardsize-1 and self.gameboard[row+1][col+1] == opponent_color):
-			for i in range(2,min(self.boardsize-1-row, self.boardsize-1-col)):
+			# for i in range(2,min(self.boardsize-1-row, self.boardsize-1-col)):
+			for i in range(2,min(self.boardsize-row, self.boardsize-col)):
 				if(self.gameboard[row+i][col+i] == 0):
 					break
 				if(self.gameboard[row+i][col+i] == my_color):
@@ -306,7 +313,7 @@ class Ai:
 		
 
 def aiVSai(boardsize):
-	depth = 4
+	depth = 2
 	board = Board(boardsize)
 	ai1 = Ai(board,WHITE, depth)
 	ai2 = Ai(board,BLACK, depth)
@@ -456,8 +463,8 @@ def main():
 	print 'Board size =', boardsize
 	print 'Human color =', color_human
 
-	newGame(boardsize, color_human)
-	# aiVSai(boardsize)
+	# newGame(boardsize, color_human)
+	aiVSai(boardsize)
 
 
 main()
