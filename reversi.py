@@ -354,7 +354,7 @@ def newGame(boardsize, color_human):
 	else:
 		color_ai = BLACK
 
-	depth = 2
+	depth = 1
 	board = Board(boardsize)
 	ai = Ai(board, color_ai, depth)
 	board.printBoard()
