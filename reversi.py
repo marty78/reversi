@@ -316,7 +316,7 @@ def aiVSai(boardsize):
 			row_int = move_ai[0]
 			col_int = move_ai[1]
 			board.makeMove(col_int,row_int,WHITE)
-			row = str(unichr(row_int + 49))
+			row = str(row_int + 1)
 			col = str(unichr(col_int + 97))
 			move = col + row
 			board.printBoard()
@@ -332,7 +332,7 @@ def aiVSai(boardsize):
 			row_int = move_ai[0]
 			col_int = move_ai[1]
 			board.makeMove(col_int,row_int,BLACK)
-			row = str(unichr(row_int + 49))
+			row = str(row_int + 1)
 			col = str(unichr(col_int + 97))
 			move = col + row
 			board.printBoard()
@@ -366,8 +366,9 @@ def newGame(boardsize, color_human):
 				while(True):
 					move_human = raw_input('<move> ')
 					move = list(move_human)
+					move[1:len(move)] = [''.join(move[1:len(move)])]
 					col = ord(move[0]) - ord('a')
-					row = ord(move[1]) - ord('1')
+					row = int(move[1]) - 1
 					valid = board.makeMove(col,row,color_human)
 					if(valid == True):
 						board.printBoard()
@@ -384,7 +385,7 @@ def newGame(boardsize, color_human):
 				row_int = move_ai[0]
 				col_int = move_ai[1]
 				board.makeMove(col_int,row_int,color_ai)
-				row = str(unichr(row_int + 49))
+				row = str(row_int + 1)
 				col = str(unichr(col_int + 97))
 				move = col + row
 				board.printBoard()
@@ -402,7 +403,7 @@ def newGame(boardsize, color_human):
 				row_int = move_ai[0]
 				col_int = move_ai[1]
 				board.makeMove(col_int,row_int,color_ai)
-				row = str(unichr(row_int + 49))
+				row = str(row_int + 1)
 				col = str(unichr(col_int + 97))
 				move = col + row
 				board.printBoard()
@@ -417,8 +418,9 @@ def newGame(boardsize, color_human):
 				while(True):
 					move_human = raw_input('<move> ')
 					move = list(move_human)
+					move[1:len(move)] = [''.join(move[1:len(move)])]
 					col = ord(move[0]) - ord('a')
-					row = ord(move[1]) - ord('1')
+					row = int(move[1]) - 1
 					valid = board.makeMove(col,row,color_human)
 					if(valid == True):
 						board.printBoard()
