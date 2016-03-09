@@ -463,8 +463,8 @@ def main():
 	print 'Board size =', boardsize
 	print 'Human color =', color_human
 
-	# newGame(boardsize, color_human)
-	aiVSai(boardsize)
+	newGame(boardsize, color_human)
+	# aiVSai(boardsize)
 
 
 main()
