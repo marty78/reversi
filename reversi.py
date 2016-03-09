@@ -356,7 +356,7 @@ def newGame(boardsize, color_human):
 	else:
 		color_ai = BLACK
 
-	depth = 4
+	depth = 3
 	board = Board(boardsize)
 	ai = Ai(board, color_ai, depth)
 	board.printBoard()
@@ -391,7 +391,7 @@ def newGame(boardsize, color_human):
 				move = col + row
 				board.printBoard()
 				board.printScore()
-				print 'Move played: ' +  move
+				print 'Move played: ' + move
 				sys.stdout.flush()
 				if(board.gameOver() == True):
 					break
