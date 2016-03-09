@@ -322,6 +322,7 @@ def aiVSai(boardsize):
 			col = str(unichr(col_int + 97))
 			move = col + row
 			board.printBoard()
+			board.printScore()
 			print 'LIGHT ', move
 			board.printScore()
 			if(board.gameOver() == True):
@@ -337,8 +338,8 @@ def aiVSai(boardsize):
 			col = str(unichr(col_int + 97))
 			move = col + row
 			board.printBoard()
-			print 'DARK ', move
 			board.printScore()
+			print 'DARK ', move
 			if(board.gameOver() == True):
 				break
 
@@ -371,10 +372,11 @@ def newGame(boardsize, color_human):
 					row = ord(move[1]) - ord('1')
 					valid = board.makeMove(col,row,color_human)
 					if(valid == True):
-						print 'Move played:', move_human
+						board.printBoard()
+						board.printScore()
+						print 'Move played: ' + move_human
+						sys.stdout.flush()
 						break
-				board.printBoard()
-				board.printScore()
 				if(board.gameOver() == True):
 					break
 
@@ -388,8 +390,9 @@ def newGame(boardsize, color_human):
 				col = str(unichr(col_int + 97))
 				move = col + row
 				board.printBoard()
-				print 'Move played:', move 
 				board.printScore()
+				print 'Move played: ' +  move
+				sys.stdout.flush()
 				if(board.gameOver() == True):
 					break
 
@@ -405,23 +408,26 @@ def newGame(boardsize, color_human):
 				col = str(unichr(col_int + 97))
 				move = col + row
 				board.printBoard()
-				print 'Move played:', move
 				board.printScore()
+				print 'Move played: ' + move
+				sys.stdout.flush()
 				if(board.gameOver() == True):
 					break
+
 			#Player make move
 			if(board.checkIfAnyValidMoves(color_human) == True):
 				while(True):
-					move_human = raw_input('Make a move: ')
+					move_human = raw_input('<move> ')
 					move = list(move_human)
 					col = ord(move[0]) - ord('a')
 					row = ord(move[1]) - ord('1')
 					valid = board.makeMove(col,row,color_human)
 					if(valid == True):
-						print 'Move played:', move_human
+						board.printBoard()
+						board.printScore()
+						print 'Move played: ' + move_human
+						sys.stdout.flush()
 						break
-				board.printBoard()
-				board.printScore()
 				if(board.gameOver() == True):
 					break
 
