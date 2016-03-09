@@ -34,7 +34,6 @@ class Board:
 		sys.stdout.write("\n")
 
 		for i in range(0, self.boardsize):
-			# print 'i = ', i
 			sys.stdout.write("%2d |" % (i + 1))
 			for j in range(0, self.boardsize):
 				if self.gameboard[i][j] == WHITE:
@@ -68,7 +67,6 @@ class Board:
 		#Now check in all directions:
 		#Left
 		if(col-2 >= 0 and self.gameboard[row][col-1] == opponent_color):
-			# for i in range(2,col):
 			for i in range(2,col+1):
 				if(self.gameboard[row][col-i] == 0):
 					break
@@ -78,7 +76,6 @@ class Board:
 					break
 		#Right
 		if(col+2 <= self.boardsize-1 and self.gameboard[row][col+1] == opponent_color):
-			# for i in range(2, self.boardsize-1-col):
 			for i in range(2, self.boardsize-col):
 				if(self.gameboard[row][col+i] == 0):
 					break
@@ -88,7 +85,6 @@ class Board:
 					break
 		#Up
 		if(row-2 >= 0 and self.gameboard[row-1][col] == opponent_color):
-			# for i in range(2,row):
 			for i in range(2,row+1):
 				if(self.gameboard[row-i][col] == 0):
 					break
@@ -98,7 +94,6 @@ class Board:
 					break
 		#Down
 		if(row+2 <= self.boardsize-1 and self.gameboard[row+1][col] == opponent_color):
-			# for i in range(2, self.boardsize-1 - row):
 			for i in range(2, self.boardsize - row):
 				if(self.gameboard[row+i][col] == 0):
 					break
@@ -108,7 +103,6 @@ class Board:
 					break
 		#Diagonally up to the left
 		if(row-2 >= 0 and col-2 >= 0 and self.gameboard[row-1][col-1] == opponent_color):
-			# for i in range(2, min(row,col)):
 			for i in range(2, min(row+1,col+1)):
 				if(self.gameboard[row-i][col-i] == 0):
 					break
@@ -118,7 +112,6 @@ class Board:
 					break
 		#Diagonally up to the right
 		if(row-2 >= 0 and col+2 <= self.boardsize-1 and self.gameboard[row-1][col+1] == opponent_color):
-			# for i in range(2,min(row,self.boardsize-1-col)):
 			for i in range(2,min(row+1,self.boardsize-col)):
 				if(self.gameboard[row-i][col+i] == 0):
 					break
@@ -128,7 +121,6 @@ class Board:
 					break
 		#Diagonally down to the left
 		if(row+2 <= self.boardsize-1 and col-2 >= 0 and self.gameboard[row+1][col-1] == opponent_color):
-			# for i in range(2,min(col, self.boardsize-1-row)):
 			for i in range(2,min(col+1, self.boardsize-row)):
 				if(self.gameboard[row+i][col-i] == 0):
 					break
@@ -138,7 +130,6 @@ class Board:
 					break
 		#Diagonally down to the right
 		if(row+2 <= self.boardsize-1 and col+2 <= self.boardsize-1 and self.gameboard[row+1][col+1] == opponent_color):
-			# for i in range(2,min(self.boardsize-1-row, self.boardsize-1-col)):
 			for i in range(2,min(self.boardsize-row, self.boardsize-col)):
 				if(self.gameboard[row+i][col+i] == 0):
 					break
@@ -453,7 +444,7 @@ def main():
 	color_human = BLACK
 	for i in range(0,len(sys.argv)):
 		if(sys.argv[i] == '-n'):
-			boardsize = ord(sys.argv[i+1]) - ord('1') + 1
+			boardsize = int(sys.argv[i+1])
 		if(sys.argv[i] == '-l'): #Human is going to play with light pieces
 			color_human = WHITE
 
